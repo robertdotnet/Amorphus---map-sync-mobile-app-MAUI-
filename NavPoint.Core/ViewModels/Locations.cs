@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using NavPoint.Core.Models;
 using NavPoint.Core.Types;
 using System;
@@ -17,10 +18,12 @@ public partial class Locations : ObservableObject
 
     public Locations()
     {
-        _locationUnits = LoadLocations();
+        LocationUnits = new ObservableCollection<LocationUnit>();
+        LoadCurrentLocations();
     }
 
-    private ObservableCollection<LocationUnit> LoadLocations()
+    [RelayCommand]
+    private void LoadCurrentLocations()
     {
         var locations = new ObservableCollection<LocationUnit>();
 
@@ -30,6 +33,13 @@ public partial class Locations : ObservableObject
             
         //TODO: logic from source e.g. DB
 
-        return locations;
+        LocationUnits = locations;
+    }
+
+    [RelayCommand]
+    private void Add(LocationUnit locationUnit)
+    {
+        //TODO: validation
+        LocationUnits.Add(locationUnit);
     }
 }

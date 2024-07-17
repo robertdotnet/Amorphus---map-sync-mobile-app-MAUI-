@@ -8,7 +8,7 @@
     Title="NavPoint">
 
     <ShellContent
-        Title="Home"
+        Title="Amorphus Drive"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
