@@ -1,4 +1,5 @@
-﻿using NavPoint.Core.ViewModels;
+﻿using Microsoft.Maui.Controls;
+using NavPoint.Core.ViewModels;
 
 namespace NavPoint;
 

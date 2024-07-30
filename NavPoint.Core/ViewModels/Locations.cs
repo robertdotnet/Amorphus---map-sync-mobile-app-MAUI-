@@ -39,7 +39,6 @@ public partial class Locations
         locations.Add(new LocationUnit("Rehearsals", LocationType.People, new Coordinates() { XCoordinate = 44.435427, YCoordinate = 26.023330 }));
         locations.Add(new LocationUnit("TDA", LocationType.People, new Coordinates() { XCoordinate = 44.435427, YCoordinate = 26.023330 }));
 
-
         //TODO: logic from source e.g. DB
 
         LocationUnits = locations;
@@ -58,7 +57,7 @@ public partial class Locations
 
     private void NavigateEvent(object obj)
     {
-        Console.WriteLine(obj.ToString());
+        Application.Current.MainPage.DisplayAlert("navigation", "clicked navigation", "OK");
     }
 
 }

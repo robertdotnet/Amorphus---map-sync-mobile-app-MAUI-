@@ -4,7 +4,8 @@
              xmlns:model="clr-namespace:NavPoint.Core.Models;assembly=NavPoint.Core"
              x:Class="NavPoint.MainPage"
              xmlns:viewmodel="clr-namespace:NavPoint.Core.ViewModels;assembly=NavPoint.Core"
-             x:DataType="viewmodel:Locations">
+             x:DataType="viewmodel:Locations"
+             xmlns:behavior="clr-namespace:NavPoint.Core.Behaviors;assembly=NavPoint.Core">
 
     <ScrollView>
         <VerticalStackLayout
@@ -27,11 +28,16 @@
 
                             <Grid RowDefinitions="60"  ColumnDefinitions="*,100,75">
                                 <Grid Grid.Row="0" Grid.Column="0" RowDefinitions="*,*">
-                                    <Label HorizontalTextAlignment="Start" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Start" FontSize="Large" TextColor="Black" Text="{Binding LocationName}"/>
-                                    <Label x:Name="placeLabel" HorizontalTextAlignment="Start" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="End" TextColor="DarkGrey" FontSize="Small" Text="{Binding LocationType}"/>
+                                    <Label x:Name="locationNameLabel" HorizontalTextAlignment="Start" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Start" FontSize="Large" TextColor="Black" Text="{Binding LocationName}"/>
+                                    <Label x:Name="locationTypeLabel" HorizontalTextAlignment="Start" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="End" TextColor="DarkGrey" FontSize="Small" Text="{Binding LocationType}"/>
                                 </Grid>
 
-                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="1" BackgroundColor="White" FontAutoScalingEnabled="True" Text="Navigate"></Button>
+                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="1" BackgroundColor="White" FontAutoScalingEnabled="True" Text="Navigate"
+                                         CommandParameter="{Binding .}">
+                                    <Button.Behaviors>
+                                        <behavior:NavigateButtonBehavior />
+                                    </Button.Behaviors>
+                                </Button>
                                 <Button CornerRadius="0" Grid.Row="0" Grid.Column="2" BackgroundColor="Red" FontAutoScalingEnabled="True" Text="Delete"></Button>
                             </Grid>
                         </Frame>
