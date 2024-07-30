@@ -20,8 +20,6 @@ public partial class Locations
     private ObservableCollection<LocationUnit> _locationUnits;
 
     int count = 0;
-    [ObservableProperty]
-    private string _testLabel;
 
     public Locations()
     {
@@ -38,6 +36,9 @@ public partial class Locations
         locations.Add(new LocationUnit("Home", LocationType.Place, new Coordinates() { XCoordinate = 44.443145, YCoordinate = 26.022156 }));
         locations.Add(new LocationUnit("Work", LocationType.Place, new Coordinates() { XCoordinate = 44.481202, YCoordinate = 26.115779 }));
         locations.Add(new LocationUnit("Stefania", LocationType.People, new Coordinates() { XCoordinate = 44.435427, YCoordinate = 26.023330 }));
+        locations.Add(new LocationUnit("Rehearsals", LocationType.People, new Coordinates() { XCoordinate = 44.435427, YCoordinate = 26.023330 }));
+        locations.Add(new LocationUnit("TDA", LocationType.People, new Coordinates() { XCoordinate = 44.435427, YCoordinate = 26.023330 }));
+
 
         //TODO: logic from source e.g. DB
 
@@ -52,27 +53,12 @@ public partial class Locations
     }
 
 
-    [RelayCommand]
-    public void NavigateCommand() 
+    public ICommand Navigate =>
+        new Command(NavigateEvent);
+
+    private void NavigateEvent(object obj)
     {
-        new Page().DisplayAlert("test", "You have been alerted", "OK");
-
-        TestLabel = $"Clicked {count}";
-        count ++;
+        Console.WriteLine(obj.ToString());
     }
-    
-    //TODO: maybe validate if Waze is installed?
-    private bool CanExecuteNavigateButton() =>  true;
 
-    private Action OnClick(LocationUnit locationUnit)
-    {
-        return () =>
-        {
-
-            if (locationUnit is LocationUnit unit) // Check if it's a LocationUnit
-            {
-                new Page().DisplayAlert(unit.ToString(), "You have been alerted", "OK");
-            }
-        };
-    }
 }

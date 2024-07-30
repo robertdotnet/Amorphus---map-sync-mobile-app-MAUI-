@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NavPoint.MainPage">
+             xmlns:model="clr-namespace:NavPoint.Core.Models;assembly=NavPoint.Core"
+             x:Class="NavPoint.MainPage"
+             xmlns:viewmodel="clr-namespace:NavPoint.Core.ViewModels;assembly=NavPoint.Core"
+             x:DataType="viewmodel:Locations">
 
     <ScrollView>
         <VerticalStackLayout
@@ -15,23 +18,21 @@
 
             <!--#region Main list with locations -->
 
-            <CollectionView x:Name="LocationsCollectionView">
+            
+            <CollectionView x:Name="LocationsCollectionView" ItemsSource="{Binding LocationUnits}">
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame
-                BackgroundColor="White">
+                    <DataTemplate x:DataType="model:LocationUnit">
+                        <Frame BackgroundColor="White">
 
-                            <Grid RowDefinitions="100"  ColumnDefinitions="*,100,75">
-
+                            <Grid RowDefinitions="60"  ColumnDefinitions="*,100,75">
                                 <Grid Grid.Row="0" Grid.Column="0" RowDefinitions="*,*">
                                     <Label HorizontalTextAlignment="Start" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Start" FontSize="Large" TextColor="Black" Text="{Binding LocationName}"/>
                                     <Label x:Name="placeLabel" HorizontalTextAlignment="Start" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="End" TextColor="DarkGrey" FontSize="Small" Text="{Binding LocationType}"/>
-                                    
                                 </Grid>
 
-                                        <Button CornerRadius="0" Grid.Row="0" Grid.Column="1" BackgroundColor="White" FontAutoScalingEnabled="True" Text="Navigate" Command="{Binding NavigateCommand}" CommandParameter="{Binding}" ></Button>
-                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="2" BackgroundColor="Red" FontAutoScalingEnabled="True" Text="Delete" Clicked="Button_Delete_Clicked"></Button>
+                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="1" BackgroundColor="White" FontAutoScalingEnabled="True" Text="Navigate"></Button>
+                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="2" BackgroundColor="Red" FontAutoScalingEnabled="True" Text="Delete"></Button>
                             </Grid>
                         </Frame>
 
@@ -40,8 +41,6 @@
             </CollectionView>
 
             <!--#endregion-->
-            <Label x:Name="testLabel" HorizontalTextAlignment="Start" Grid.Row="2" Grid.Column="0" VerticalTextAlignment="End" TextColor="DarkGrey" FontSize="Small" Text="{Binding TestLabel}"/>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
