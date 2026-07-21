@@ -3,13 +3,11 @@
     x:Class="NavPoint.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:NavPoint"
     Shell.FlyoutBehavior="Disabled"
     Title="NavPoint">
 
     <ShellContent
-        Title="Amorphus Drive"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+        x:Name="MainShellContent"
+        Route="MainPage"
+        Title="Amorphus Drive" />
 </Shell>

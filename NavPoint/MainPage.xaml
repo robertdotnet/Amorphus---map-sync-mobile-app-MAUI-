@@ -1,52 +1,352 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:model="clr-namespace:NavPoint.Core.Models;assembly=NavPoint.Core"
-             x:Class="NavPoint.MainPage"
-             xmlns:viewmodel="clr-namespace:NavPoint.Core.ViewModels;assembly=NavPoint.Core"
-             x:DataType="viewmodel:Locations"
-             xmlns:behavior="clr-namespace:NavPoint.Core.Behaviors;assembly=NavPoint.Core">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NavPoint.MainPage"
+    x:Name="Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behavior="clr-namespace:NavPoint.Core.Behaviors;assembly=NavPoint.Core"
+    xmlns:model="clr-namespace:NavPoint.Core.Models;assembly=NavPoint.Core"
+    xmlns:shapes="clr-namespace:Microsoft.Maui.Controls.Shapes;assembly=Microsoft.Maui.Controls"
+    xmlns:viewmodel="clr-namespace:NavPoint.Core.ViewModels;assembly=NavPoint.Core"
+    x:DataType="viewmodel:Locations"
+    BackgroundColor="#1F1F1F">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />
+    <ContentPage.Resources>
+        <Style x:Key="CardActionButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HeightRequest" Value="44" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="TextColor" Value="#6045A8" />
+        </Style>
 
-            <!--#region Main list with locations -->
+        <Style x:Key="NavigateButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#6F45E8" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HeightRequest" Value="44" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#5530C9" />
+                                <Setter Property="Scale" Value="0.97" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#B8AADF" />
+                                <Setter Property="TextColor" Value="#F1EDF9" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
 
-            
-            <CollectionView x:Name="LocationsCollectionView" ItemsSource="{Binding LocationUnits}">
+    <Grid>
+        <CollectionView
+            x:Name="LocationsCollectionView"
+            Margin="0,0,0,76"
+            ItemsSource="{Binding LocationUnits}"
+            SelectionMode="None">
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="20,12,20,14" Spacing="8">
+                    <Image
+                        Aspect="AspectFit"
+                        HeightRequest="170"
+                        SemanticProperties.Description="Purple robot driving a race car"
+                        Source="dotnet_bot.png" />
+                    <Label
+                        FontFamily="OpenSansSemibold"
+                        FontSize="20"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Text="Saved destinations"
+                        TextColor="White" />
+                    <Label
+                        FontSize="13"
+                        Text="Choose Navigate to open the saved coordinates in Waze."
+                        TextColor="#AFA9B8" />
+                    <Border
+                        IsVisible="{Binding HasFailureMessage}"
+                        Margin="0,8,0,0"
+                        Padding="12,10"
+                        BackgroundColor="#3B2228"
+                        Stroke="#7D3543"
+                        StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <shapes:RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <Label
+                            FontSize="13"
+                            Text="{Binding FailureMessage}"
+                            TextColor="#FFB4BC" />
+                    </Border>
+                </VerticalStackLayout>
+            </CollectionView.Header>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:LocationUnit">
-                        <Frame BackgroundColor="White">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout
+                    IsVisible="{Binding IsEmpty}"
+                    Padding="36,50"
+                    Spacing="8">
+                    <Label
+                        FontFamily="OpenSansSemibold"
+                        FontSize="20"
+                        HorizontalTextAlignment="Center"
+                        Text="No saved destinations"
+                        TextColor="White" />
+                    <Label
+                        FontSize="14"
+                        HorizontalTextAlignment="Center"
+                        Text="Tap + to save your first place or person."
+                        TextColor="#AFA9B8" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
 
-                            <Grid RowDefinitions="60"  ColumnDefinitions="*,100,75">
-                                <Grid Grid.Row="0" Grid.Column="0" RowDefinitions="*,*">
-                                    <Label x:Name="locationNameLabel" HorizontalTextAlignment="Start" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Start" FontSize="Large" TextColor="Black" Text="{Binding LocationName}"/>
-                                    <Label x:Name="locationTypeLabel" HorizontalTextAlignment="Start" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="End" TextColor="DarkGrey" FontSize="Small" Text="{Binding LocationType}"/>
-                                </Grid>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:LocationUnit">
+                    <Border
+                        Margin="20,0,20,12"
+                        Padding="18,16"
+                        BackgroundColor="White"
+                        Stroke="#ECE8F2"
+                        StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <shapes:RoundRectangle CornerRadius="18" />
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Offset="0,3" Opacity="0.16" Radius="10" />
+                        </Border.Shadow>
 
-                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="1" BackgroundColor="White" FontAutoScalingEnabled="True" Text="Navigate"
-                                         CommandParameter="{Binding .}">
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="14">
+                            <VerticalStackLayout Grid.Row="0" Spacing="2">
+                                <Label
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="20"
+                                    LineBreakMode="TailTruncation"
+                                    SemanticProperties.HeadingLevel="Level3"
+                                    Text="{Binding LocationName}"
+                                    TextColor="#17131C" />
+                                <Label
+                                    FontSize="13"
+                                    Text="{Binding LocationType}"
+                                    TextColor="#7A7482" />
+                            </VerticalStackLayout>
+
+                            <Grid
+                                Grid.Row="1"
+                                ColumnDefinitions="Auto,*,Auto,Auto"
+                                ColumnSpacing="4">
+                                <Button
+                                    Grid.Column="0"
+                                    CommandParameter="{Binding .}"
+                                    IsEnabled="{Binding Source={x:Reference Page}, Path=BindingContext.IsNotBusy}"
+                                    SemanticProperties.Description="Navigate to this saved destination with Waze"
+                                    Style="{StaticResource NavigateButton}"
+                                    Text="Navigate  ›"
+                                    ToolTipProperties.Text="Open in Waze">
                                     <Button.Behaviors>
                                         <behavior:NavigateButtonBehavior />
                                     </Button.Behaviors>
                                 </Button>
-                                <Button CornerRadius="0" Grid.Row="0" Grid.Column="2" BackgroundColor="Red" FontAutoScalingEnabled="True" Text="Delete"></Button>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenEditCommand}"
+                                    CommandParameter="{Binding .}"
+                                    IsEnabled="{Binding Source={x:Reference Page}, Path=BindingContext.IsNotBusy}"
+                                    SemanticProperties.Description="Edit this saved destination"
+                                    Style="{StaticResource CardActionButton}"
+                                    Text="Edit"
+                                    ToolTipProperties.Text="Edit entry" />
+
+                                <Button
+                                    Grid.Column="3"
+                                    Clicked="OnDeleteClicked"
+                                    CommandParameter="{Binding .}"
+                                    IsEnabled="{Binding Source={x:Reference Page}, Path=BindingContext.IsNotBusy}"
+                                    SemanticProperties.Description="Delete this saved destination"
+                                    Style="{StaticResource CardActionButton}"
+                                    Text="Delete"
+                                    TextColor="#B42318"
+                                    ToolTipProperties.Text="Delete entry" />
                             </Grid>
-                        </Frame>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+        <ActivityIndicator
+            HeightRequest="48"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            SemanticProperties.Description="Loading saved destinations"
+            VerticalOptions="Center"
+            WidthRequest="48" />
 
-            <!--#endregion-->
-        </VerticalStackLayout>
-    </ScrollView>
+        <Button
+            Margin="0,0,20,18"
+            BackgroundColor="#8A5CF6"
+            Command="{Binding OpenAddCommand}"
+            CornerRadius="30"
+            FontFamily="OpenSansRegular"
+            FontSize="32"
+            HeightRequest="60"
+            HorizontalOptions="End"
+            IsEnabled="{Binding IsNotBusy}"
+            Padding="0,-3,0,0"
+            SemanticProperties.Description="Add a saved destination"
+            Text="+"
+            TextColor="White"
+            ToolTipProperties.Text="Add entry"
+            VerticalOptions="End"
+            WidthRequest="60" />
+
+        <Grid
+            IsVisible="{Binding IsEditorOpen}"
+            Padding="20"
+            BackgroundColor="#C0000000">
+            <Border
+                Padding="0"
+                BackgroundColor="#29252F"
+                HorizontalOptions="Center"
+                MaximumWidthRequest="520"
+                Stroke="#6F45E8"
+                StrokeThickness="1"
+                VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <shapes:RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="Black" Offset="0,8" Opacity="0.45" Radius="24" />
+                </Border.Shadow>
+
+                <ScrollView MaximumHeightRequest="680">
+                    <VerticalStackLayout Padding="22" Spacing="10">
+                        <Grid ColumnDefinitions="*,44">
+                            <Label
+                                Grid.Column="0"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="22"
+                                SemanticProperties.HeadingLevel="Level2"
+                                Text="{Binding EditorTitle}"
+                                TextColor="White"
+                                VerticalTextAlignment="Center" />
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="Transparent"
+                                Command="{Binding CloseEditorCommand}"
+                                FontSize="26"
+                                Padding="0"
+                                SemanticProperties.Description="Close editor"
+                                Text="×"
+                                TextColor="#C7C1CE"
+                                ToolTipProperties.Text="Close" />
+                        </Grid>
+
+                        <Label Margin="0,4,0,0" FontFamily="OpenSansSemibold" FontSize="13" Text="Name" TextColor="#DCD6E4" />
+                        <Border Padding="12,0" BackgroundColor="#211E26" Stroke="#514A5B" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <shapes:RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Entry
+                                ClearButtonVisibility="WhileEditing"
+                                MaxLength="120"
+                                Placeholder="e.g. Home"
+                                PlaceholderColor="#7F7888"
+                                ReturnType="Next"
+                                SemanticProperties.Description="Destination name"
+                                Text="{Binding EditorName}"
+                                TextColor="White" />
+                        </Border>
+
+                        <Label FontFamily="OpenSansSemibold" FontSize="13" Text="Type" TextColor="#DCD6E4" />
+                        <Border Padding="8,0" BackgroundColor="#211E26" Stroke="#514A5B" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <shapes:RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Picker
+                                ItemsSource="{Binding LocationTypes}"
+                                SelectedItem="{Binding EditorLocationType}"
+                                SemanticProperties.Description="Destination type"
+                                TextColor="White"
+                                Title="Select a type"
+                                TitleColor="#7F7888" />
+                        </Border>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label FontFamily="OpenSansSemibold" FontSize="13" Text="Latitude" TextColor="#DCD6E4" />
+                                <Border Padding="12,0" BackgroundColor="#211E26" Stroke="#514A5B" StrokeThickness="1">
+                                    <Border.StrokeShape>
+                                        <shapes:RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Entry
+                                        Keyboard="Numeric"
+                                        Placeholder="44.443145"
+                                        PlaceholderColor="#7F7888"
+                                        SemanticProperties.Description="Latitude between minus 90 and 90"
+                                        Text="{Binding EditorLatitude}"
+                                        TextColor="White" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label FontFamily="OpenSansSemibold" FontSize="13" Text="Longitude" TextColor="#DCD6E4" />
+                                <Border Padding="12,0" BackgroundColor="#211E26" Stroke="#514A5B" StrokeThickness="1">
+                                    <Border.StrokeShape>
+                                        <shapes:RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Entry
+                                        Keyboard="Numeric"
+                                        Placeholder="26.022156"
+                                        PlaceholderColor="#7F7888"
+                                        SemanticProperties.Description="Longitude between minus 180 and 180"
+                                        Text="{Binding EditorLongitude}"
+                                        TextColor="White" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label
+                            IsVisible="{Binding HasValidationMessage}"
+                            FontSize="13"
+                            Text="{Binding ValidationMessage}"
+                            TextColor="#FFB4BC" />
+
+                        <Grid Margin="0,8,0,0" ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button
+                                Grid.Column="0"
+                                BackgroundColor="Transparent"
+                                BorderColor="#665F70"
+                                BorderWidth="1"
+                                Command="{Binding CloseEditorCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Text="Cancel"
+                                TextColor="White" />
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="#7A4FF0"
+                                Command="{Binding SaveCommand}"
+                                FontFamily="OpenSansSemibold"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Text="Save"
+                                TextColor="White" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </Grid>
 </ContentPage>

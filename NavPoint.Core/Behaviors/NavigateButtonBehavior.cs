@@ -24,7 +24,7 @@ namespace NavPoint.Core.Behaviors
             bindable.Clicked -= OnButtonClicked;
         }
 
-        private void OnButtonClicked(object sender, EventArgs e)
+        private void OnButtonClicked(object? sender, EventArgs e)
         {
 
 
@@ -46,12 +46,12 @@ namespace NavPoint.Core.Behaviors
                 //WAZE NAVIGATION
                 string wazeUri = $"waze://?ll={latitude},{longitude}&navigate=yes";
                 Launcher.OpenAsync(wazeUri);
-                
+
                 //DEFAULT NAVIGATION
                 //Map.Default.OpenAsync(latitude, longitude);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle exceptions
             }
